@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: pspBLAS
+Description: Library providing sparse matrix storage and operations.
+Version: @VERSION@
+Libs: -L${libdir} -lpspBLAS
+Cflags: -I${includedir}

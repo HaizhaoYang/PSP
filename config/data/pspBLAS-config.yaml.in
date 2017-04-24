@@ -1,0 +1,61 @@
+%YAML 1.1
+---
+timestamp: "@psp_timestamp@"
+
+target:
+    cpu: "@target_cpu@"
+    vendor: "@target_vendor@"
+    os: "@target_os@"
+
+compilers:
+    CPP: "@CPP@"
+    CPPFLAGS: "@CPPFLAGS@"
+    CC: "@CC@"
+    MPICC: "@MPICC@"
+    CFLAGS: "@CFLAGS@"
+    FC: "@FC@"
+    MPIFC: "@MPIFC@"
+    FCFLAGS: "@FCFLAGS@"
+    LDFLAGS: "@LDFLAGS@"
+    LIBS: "@LIBS@"
+
+defaults:
+    debug_enable: "@psp_debug_enable_def@"
+    linalg_enable: "@psp_linalg_enable_def@"
+    mpi_enable: "@psp_mpi_enable_def@"
+    linalg_incs: "@psp_linalg_incs_def@"
+    linalg_libs: "@psp_linalg_libs_def@"
+
+options:
+    enable_debug: "@enable_debug@"
+    with_linalg: "@with_linalg@"
+    with_mpi: "@with_mpi@"
+
+triggers:
+    debug_enable: "@psp_debug_enable@"
+    linalg_enable: "@psp_linalg_enable@"
+    mpi_enable: "@psp_mpi_enable@"
+
+inits:
+    debug: "@psp_debug_type@"
+    linalg: "@psp_linalg_type@"
+    mpi: "@psp_mpi_type@"
+
+deps:
+    linalg_incs: "@psp_linalg_incs@"
+    linalg_libs: "@psp_linalg_libs@"
+    mpi_incs: "@psp_mpi_incs@"
+    mpi_libs: "@psp_mpi_libs@"
+
+linalg_internals:
+    has_lapack: "@psp_linalg_has_lapack@"
+    has_scalapack: "@psp_linalg_has_lapack@"
+
+mpi_internals:
+    cc_set: "@psp_mpi_cc_set@"
+    cc_wrap: "@psp_mpi_cc_wrap@"
+    fc_set: "@psp_mpi_fc_set@"
+    fc_wrap: "@psp_mpi_fc_wrap@"
+    fc_wrap: "@psp_mpi_incs@"
+    fc_wrap: "@psp_mpi_libs@"
+

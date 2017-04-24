@@ -1,0 +1,9 @@
+Todo list for Psp
+=================
+
+[ ] Properly enclose MPI statements within #ifdef MPI ... #endif blocks.
+[ ] Prune the numerous unused variables form the source code.
+[ ] Decide how to manage -DLAP and -DSLAP.
+[ ] Decide whether Psp should be usable without MPI.
+[ ] Explain what the 2 programs in test/ do.
+[ ] Decide whether the 2 test programs should be run by 'make check'.

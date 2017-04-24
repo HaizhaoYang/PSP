@@ -1,1 +1,3 @@
 # PSP
+
+– The pspBLAS is an extensible distributed-memory parallel library offering a basic set of linear algebra primitives.– It achieves scalability and load balance via its 1D or 2D block cyclic distribution.– Rountines for sparse data types includes (sparse) matrix (sparse) vector multiplication, (sparse) matrix (sparse) matrix multiplication, etc.– Supports several sparse format, e.g. COO, CSC, and CSR– Similar user habits with Scalapack

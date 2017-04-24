@@ -1,0 +1,221 @@
+pspBLAS.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspLevel3/pspLevel3.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel1/pspLevel1.$(LTOBJEXT): \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel2/pspLevel2.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspLevel3.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel3/pspGemm.$(LTOBJEXT) \
+  pspLevel3/pspSpmm.$(LTOBJEXT) \
+  pspLevel3/pspMspm.$(LTOBJEXT) \
+  pspLevel3/pspSpmSpm.$(LTOBJEXT)
+
+pspLevel3/pspMatSum.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspGemm.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspMspm_nn.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspMspm_nt.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspMspm_tn.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmm_nn.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmm_nt.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmm_tn.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmSpm_nn.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmSpm_nt.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmSpm_tn.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmSpm_tt.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspLevel3/pspSpmm_tt.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_nt.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_tn.$(LTOBJEXT)
+
+pspLevel3/pspSpmm.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_nn.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_nt.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_tn.$(LTOBJEXT) \
+  pspLevel3/pspSpmm_tt.$(LTOBJEXT)
+
+pspLevel3/pspMspm_tt.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspLevel3/pspMspm_nt.$(LTOBJEXT) \
+  pspLevel3/pspMspm_tn.$(LTOBJEXT)
+
+pspLevel3/pspMspm.$(LTOBJEXT): \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspLevel3/pspMspm_nn.$(LTOBJEXT) \
+  pspLevel3/pspMspm_nt.$(LTOBJEXT) \
+  pspLevel3/pspMspm_tn.$(LTOBJEXT) \
+  pspLevel3/pspMspm_tt.$(LTOBJEXT)
+
+pspLevel3/pspSpmSpm.$(LTOBJEXT): \
+  pspLevel3/pspMatSum.$(LTOBJEXT) \
+  pspLevel1/pspLevel1.$(LTOBJEXT) \
+  pspLevel2/pspLevel2.$(LTOBJEXT) \
+  pspMPI/pspMPI.$(LTOBJEXT) \
+  pspUtility/pspUtility.$(LTOBJEXT) \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspLevel3/pspSpmSpm_nn.$(LTOBJEXT) \
+  pspLevel3/pspSpmSpm_nt.$(LTOBJEXT) \
+  pspLevel3/pspSpmSpm_tn.$(LTOBJEXT) \
+  pspLevel3/pspSpmSpm_tt.$(LTOBJEXT)
+
+pspUtility/pspBasicTool.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT)
+
+pspUtility/pspListTool.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspUtility/pspBasicTool.$(LTOBJEXT)
+
+pspUtility/psp_spBLAS_Level1.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspUtility/pspBasicTool.$(LTOBJEXT) \
+  pspUtility/pspListTool.$(LTOBJEXT)
+
+pspUtility/psp_spBLAS_Level2.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspUtility/pspBasicTool.$(LTOBJEXT) \
+  pspUtility/pspListTool.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS_Level1.$(LTOBJEXT)
+
+pspUtility/psp_spBLAS_Level3.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspUtility/pspBasicTool.$(LTOBJEXT) \
+  pspUtility/pspListTool.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS_Level1.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS_Level2.$(LTOBJEXT)
+
+pspUtility/psp_spBLAS.$(LTOBJEXT): \
+  pspUtility/psp_spBLAS_Level1.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS_Level2.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS_Level3.$(LTOBJEXT)
+
+pspUtility/pspUtility.$(LTOBJEXT): \
+  pspVariable/pspVariable.$(LTOBJEXT) \
+  pspUtility/pspBasicTool.$(LTOBJEXT) \
+  pspUtility/pspListTool.$(LTOBJEXT) \
+  pspUtility/psp_spBLAS.$(LTOBJEXT)
+
+pspVariable/psp_dList.$(LTOBJEXT): \
+  pspVariable/pspNode.$(LTOBJEXT)
+
+pspVariable/psp_zList.$(LTOBJEXT): \
+  pspVariable/pspNode.$(LTOBJEXT)
+
+pspVariable/pspListType.$(LTOBJEXT): \
+  pspVariable/psp_dList.$(LTOBJEXT) \
+  pspVariable/psp_zList.$(LTOBJEXT)
+
+pspVariable/pspMat.$(LTOBJEXT): \
+  pspVariable/pspListType.$(LTOBJEXT)
+
+pspVariable/pspVariable.$(LTOBJEXT): \
+  pspVariable/pspListType.$(LTOBJEXT) \
+  pspVariable/pspMat.$(LTOBJEXT)
+
+pspMPI/pspMPI.$(LTOBJEXT): \
+  pspUtility/pspUtility.$(LTOBJEXT)
