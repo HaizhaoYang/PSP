@@ -158,9 +158,11 @@ contains
              B_loc=0.0_dp
           endif
 #ifdef HAVE_MKL
-          call psp_copy_m(opB,width,B_loc_dim(1),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          !call psp_copy_m(opB,width,B_loc_dim(1),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          B_loc(:,1:width)=TRANSPOSE(B(loc_st:loc_st+width-1,1:B_loc_dim(2)))
 #else
-          call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          !call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          B_loc(1:width,:)=B(loc_st:loc_st+width-1,1:B_loc_dim(2))
 #endif
        end if
 
@@ -188,7 +190,8 @@ contains
        if (ipcol==idx_pcol) then
           call psp_idx_glb2loc(glb_st,psp_bs_def_col,npcol,loc_st)
           !C=beta*C+C_loc
-          call psp_copy_m('n',C_loc_dim(1),width,CC_loc,1,1,C,1,loc_st,alpha,beta)
+          !call psp_copy_m('n',C_loc_dim(1),width,CC_loc,1,1,C,1,loc_st,alpha,beta)
+          C(1:C_loc_dim(1),loc_st:loc_st+width-1)=beta*C(1:C_loc_dim(1),loc_st:loc_st+width-1)+alpha*CC_loc(1:C_loc_dim(1),1:width)
        end if
     enddo
     if (allocated(B_loc)) deallocate(B_loc)
@@ -232,6 +235,7 @@ contains
     integer, allocatable :: A_loc_idx1(:), A_loc_idx2(:)
     integer :: A_loc_dim(2), B_loc_dim(2), C_loc_dim(2), coords(2)
     integer :: width, glb_st, glb_ed, loc_st, loc_ed, nnz_loc, L
+    integer :: trB
 #ifdef HAVE_MKL
     character(1) :: matdescr(6)
     integer, allocatable :: A_loc_idx3(:)
@@ -271,6 +275,7 @@ contains
     call blacs_gridinfo(psp_icontxt,nprow,npcol,iprow,ipcol)
 
     ! set up local variables
+    call psp_process_opM(opB,trB)
     ! allocate local matrices
     A_loc_dim(1)=numroc(M,psp_bs_def_row,iprow,0,nprow)
     A_loc_dim(2)=numroc(K,psp_bs_def_col,ipcol,0,npcol)
@@ -310,9 +315,14 @@ contains
              B_loc=cmplx_0
           endif
 #ifdef HAVE_MKL
-          call psp_copy_m(opB,width,B_loc_dim(1),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          !call psp_copy_m(opB,width,B_loc_dim(1),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          B_loc(:,1:width)=TRANSPOSE(B(loc_st:loc_st+width-1,1:B_loc_dim(2)))
+          if (trB==1) then
+             B_loc = CONJG(B_loc)
+          end if
 #else
-          call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          !call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          B_loc(1:width,:)=B(loc_st:loc_st+width-1,1:B_loc_dim(2))
 #endif
        end if
 
@@ -340,8 +350,9 @@ contains
 
        if (ipcol==idx_pcol) then
           call psp_idx_glb2loc(glb_st,psp_bs_def_col,npcol,loc_st)
-          !C=beta*C+C_loc
-          call psp_copy_m('n',C_loc_dim(1),width,CC_loc,1,1,C,1,loc_st,alpha,beta)
+          !C=beta*C+alpha*C_loc
+          !call psp_copy_m('n',C_loc_dim(1),width,CC_loc,1,1,C,1,loc_st,alpha,beta)
+          C(1:C_loc_dim(1),loc_st:loc_st+width-1)=beta*C(1:C_loc_dim(1),loc_st:loc_st+width-1)+alpha*CC_loc(1:C_loc_dim(1),1:width)
        end if
     enddo
     if (allocated(B_loc)) deallocate(B_loc)

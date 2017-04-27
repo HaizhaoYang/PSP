@@ -189,7 +189,8 @@ contains
           if (width<psp_update_rank) then
              B_loc=0.0_dp
           end if
-          call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          !call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,1.0_dp,0.0_dp)
+          B_loc(1:width,:)=B(loc_st:loc_st+width-1,1:B_loc_dim(2))
        end if
        ! boardcast in column
        call MPI_Bcast(B_loc, B_loc_dim(1)*B_loc_dim(2), MPI_DOUBLE, idx_prow, psp_mpi_comm_col,mpi_err)
@@ -212,7 +213,8 @@ contains
     enddo
 
     !C=beta*C+C_loc
-    call psp_copy_m('n',C_loc_dim(1),C_loc_dim(2),C_loc,1,1,C,1,1,alpha,beta)
+    !call psp_copy_m('n',C_loc_dim(1),C_loc_dim(2),C_loc,1,1,C,1,1,alpha,beta)
+    C(1:C_loc_dim(1),1:C_loc_dim(2))=beta*C(1:C_loc_dim(1),1:C_loc_dim(2))+alpha*C_loc
 
     if (allocated(B_loc)) deallocate(B_loc)
     if (allocated(C_loc)) deallocate(C_loc)
@@ -366,7 +368,8 @@ contains
           if (width<psp_update_rank) then
              B_loc=cmplx_0
           end if
-          call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          !call psp_copy_m('n',width,B_loc_dim(2),B,loc_st,1,B_loc,1,1,cmplx_1,cmplx_0)
+          B_loc(1:width,:)=B(loc_st:loc_st+width-1,1:B_loc_dim(2))
        end if
        ! boardcast in column
        call MPI_Bcast(B_loc, B_loc_dim(1)*B_loc_dim(2), MPI_DOUBLE_COMPLEX, idx_prow, psp_mpi_comm_col,mpi_err)
@@ -390,7 +393,8 @@ A_loc_idx2,A_loc_idx3,B_loc,B_loc_dim(1),cmplx_1,C_loc,C_loc_dim(1))
     enddo
 
     !C=beta*C+C_loc
-    call psp_copy_m('n',C_loc_dim(1),C_loc_dim(2),C_loc,1,1,C,1,1,alpha,beta)
+    !call psp_copy_m('n',C_loc_dim(1),C_loc_dim(2),C_loc,1,1,C,1,1,alpha,beta)
+    C(1:C_loc_dim(1),1:C_loc_dim(2))=beta*C(1:C_loc_dim(1),1:C_loc_dim(2))+alpha*C_loc
 
     if (allocated(B_loc)) deallocate(B_loc)
     if (allocated(C_loc)) deallocate(C_loc)

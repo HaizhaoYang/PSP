@@ -203,7 +203,8 @@ contains
        if (iprow==idx_prow) then
           call psp_idx_glb2loc(glb_st,psp_bs_def_row,nprow,loc_st)
           !C=beta*C+C_loc
-          call psp_copy_m('n',width,C_loc_dim(2),CC_loc,1,1,C,loc_st,1,alpha,beta)
+          !call psp_copy_m('n',width,C_loc_dim(2),CC_loc,1,1,C,loc_st,1,alpha,beta)
+          C(loc_st:loc_st+width-1,1:C_loc_dim(2))=beta*C(loc_st:loc_st+width-1,1:C_loc_dim(2))+alpha*CC_loc(1:width,1:C_loc_dim(2))
        end if
     enddo
 
@@ -370,7 +371,8 @@ contains
        if (iprow==idx_prow) then
           call psp_idx_glb2loc(glb_st,psp_bs_def_row,nprow,loc_st)
           !C=beta*C+C_loc
-          call psp_copy_m('n',width,C_loc_dim(2),CC_loc,1,1,C,loc_st,1,alpha,beta)
+          !call psp_copy_m('n',width,C_loc_dim(2),CC_loc,1,1,C,loc_st,1,alpha,beta)
+          C(loc_st:loc_st+width-1,1:C_loc_dim(2))=beta*C(loc_st:loc_st+width-1,1:C_loc_dim(2))+alpha*CC_loc(1:width,1:C_loc_dim(2))
        end if
     enddo
 
