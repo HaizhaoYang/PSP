@@ -1,0 +1,28 @@
+all : libs tests
+
+libs : PSP_lib
+
+tests : PSP_test
+
+clean : clean_libs clean_tests
+
+clean_libs : clean_PSP
+
+clean_tests : clean_PSP_test
+
+PSP_lib :
+	cd ./src; \
+	make -f Makefile.manual; \
+	make -f Makefile.manual install
+
+PSP_test : pspBLAS_lib
+	cd ./test; \
+	make -f Makefile.manual
+
+clean_PSP :
+	cd ./src; \
+	make -f Makefile.manual clean
+
+clean_PSP_test :
+	cd ./test; \
+	make -f Makefile.manual clean
