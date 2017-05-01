@@ -15,7 +15,7 @@ PSP_lib :
 	make -f Makefile.manual; \
 	make -f Makefile.manual install
 
-PSP_test : pspBLAS_lib
+PSP_test : PSP_lib
 	cd ./test; \
 	make -f Makefile.manual
 
