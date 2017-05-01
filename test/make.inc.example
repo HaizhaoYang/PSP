@@ -1,2 +1,0 @@
-LINALG_INCLUDES =
-LINALG_LIBS = -lscalapack -llapack -lblas

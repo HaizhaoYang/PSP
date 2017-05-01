@@ -1,1 +1,1 @@
-ROOTDIR = ../..
+ROOTDIR = ..
