@@ -75,6 +75,38 @@ contains
 
     !logical :: changeFmtB
     integer :: trA, trB, ot
+    integer :: iprow, ipcol, nprow, npcol, mpi_err
+    real(dp), allocatable :: tmp(:,:)
+    integer :: dims_before(2), dims_after(2)
+    integer :: desc_before(9), desc_after(9)
+
+    !**** GLOBAL **********************************!
+#ifdef HAVE_MPI
+    character(1) :: psp_proc_order
+
+    integer :: psp_mpi_comm_world
+    integer :: psp_mpi_size
+    integer :: psp_nprow
+    integer :: psp_npcol
+    integer :: psp_bs_def_row
+    integer :: psp_bs_def_col
+    integer :: psp_update_rank ! In SUMMA for C=A*B, C is computed by rank psp_update_rank=1 local update
+    integer :: psp_bs_num
+    integer :: psp_icontxt ! BLACS context handle used by psp
+    integer :: psp_mpi_comm_cart, psp_mpi_comm_row, psp_mpi_comm_col
+
+
+    common /psp_grid2D/ psp_mpi_comm_world, psp_mpi_size, psp_nprow, psp_npcol
+    common /psp_grid2D/ psp_bs_def_row, psp_bs_def_col
+    common /psp_grid2D/ psp_update_rank ! In SUMMA for C=A*B, C is computed by rank psp_update_rank=1 local update
+    common /psp_grid2D/ psp_bs_num
+    common /psp_grid2D/ psp_icontxt ! BLACS context handle used by psp
+    common /psp_grid2D/ psp_mpi_comm_cart, psp_mpi_comm_row, psp_mpi_comm_col
+#endif
+
+    !**********************************************!
+
+    integer, external :: numroc ! it is a function to compute local size
 
     !**********************************************!
     if (alpha/=0.0_dp) then
@@ -105,7 +137,24 @@ contains
        case (2)
           call psp_gemspm_nt(M,N,K,A,opA,B,opB,C,alpha,beta)
        case (3)
-          call psp_gemspm_tn(M,N,K,A,opA,B,opB,C,alpha,beta)
+          ! TODO: optimize the following code by optimizing the communication according to the 
+          ! matrix format and dimension 
+          call blacs_gridinfo(psp_icontxt,nprow,npcol,iprow,ipcol)
+          if (.true.) then
+             ! tmp = transpose(A)
+             dims_before(1)=numroc(K,psp_bs_def_row,iprow,0,nprow)
+             dims_before(2)=numroc(M,psp_bs_def_col,ipcol,0,npcol)
+             call descinit(desc_before,K,M,psp_bs_def_row,psp_bs_def_col,0,0,psp_icontxt,dims_before(1),mpi_err)
+             dims_after(1)=numroc(M,psp_bs_def_row,iprow,0,nprow)
+             dims_after(2)=numroc(K,psp_bs_def_col,ipcol,0,npcol)
+             call descinit(desc_after,M,K,psp_bs_def_row,psp_bs_def_col,0,0,psp_icontxt,dims_after(1),mpi_err)
+             allocate(tmp(dims_after(1),dims_after(2)))
+             call pdtran(M,K,1.0_dp,A,1,1,desc_before, 0.0_dp,tmp,1,1,desc_after)
+
+             ! compute C = alpha*tmp*B + beta*C
+             call psp_gemspm_nn(M,N,K,tmp,'n',B,opB,C,alpha,beta)
+          end if
+          !call psp_gemspm_tn(M,N,K,A,opA,B,opB,C,alpha,beta)
        case (4)
           call psp_gemspm_tt(M,N,K,A,opA,B,opB,C,alpha,beta)
        end select
@@ -139,6 +188,38 @@ contains
     !**** LOCAL ***********************************!
     !logical :: changeFmtB
     integer :: trA, trB, ot
+    integer :: iprow, ipcol, nprow, npcol, mpi_err
+    complex(dp), allocatable :: tmp(:,:)
+    integer :: dims_before(2), dims_after(2)
+    integer :: desc_before(9), desc_after(9)
+
+    !**** GLOBAL **********************************!
+#ifdef HAVE_MPI
+    character(1) :: psp_proc_order
+
+    integer :: psp_mpi_comm_world
+    integer :: psp_mpi_size
+    integer :: psp_nprow
+    integer :: psp_npcol
+    integer :: psp_bs_def_row
+    integer :: psp_bs_def_col
+    integer :: psp_update_rank ! In SUMMA for C=A*B, C is computed by rank psp_update_rank=1 local update
+    integer :: psp_bs_num
+    integer :: psp_icontxt ! BLACS context handle used by psp
+    integer :: psp_mpi_comm_cart, psp_mpi_comm_row, psp_mpi_comm_col
+
+
+    common /psp_grid2D/ psp_mpi_comm_world, psp_mpi_size, psp_nprow, psp_npcol
+    common /psp_grid2D/ psp_bs_def_row, psp_bs_def_col
+    common /psp_grid2D/ psp_update_rank ! In SUMMA for C=A*B, C is computed by rank psp_update_rank=1 local update
+    common /psp_grid2D/ psp_bs_num
+    common /psp_grid2D/ psp_icontxt ! BLACS context handle used by psp
+    common /psp_grid2D/ psp_mpi_comm_cart, psp_mpi_comm_row, psp_mpi_comm_col
+#endif
+
+    !**********************************************!
+
+    integer, external :: numroc ! it is a function to compute local size
 
     !**********************************************!
     if (alpha/=cmplx_0) then
@@ -169,7 +250,28 @@ contains
        case (2)
           call psp_gemspm_nt(M,N,K,A,opA,B,opB,C,alpha,beta)
        case (3)
-          call psp_gemspm_tn(M,N,K,A,opA,B,opB,C,alpha,beta)
+          ! TODO: optimize the following code by optimizing the communication according to the 
+          ! matrix format and dimension 
+          call blacs_gridinfo(psp_icontxt,nprow,npcol,iprow,ipcol)
+          if (.true.) then
+             ! tmp = transpose(A)
+             dims_before(1)=numroc(K,psp_bs_def_row,iprow,0,nprow)
+             dims_before(2)=numroc(M,psp_bs_def_col,ipcol,0,npcol)
+             call descinit(desc_before,K,M,psp_bs_def_row,psp_bs_def_col,0,0,psp_icontxt,dims_before(1),mpi_err)
+             dims_after(1)=numroc(M,psp_bs_def_row,iprow,0,nprow)
+             dims_after(2)=numroc(K,psp_bs_def_col,ipcol,0,npcol)
+             call descinit(desc_after,M,K,psp_bs_def_row,psp_bs_def_col,0,0,psp_icontxt,dims_after(1),mpi_err)
+             allocate(tmp(dims_after(1),dims_after(2)))
+             if (trA==1) then
+                call pztranc(M,K,cmplx_1,A,1,1,desc_before,cmplx_0,tmp,1,1,desc_after)
+             else
+                call pztranu(M,K,cmplx_1,A,1,1,desc_before,cmplx_0,tmp,1,1,desc_after)
+             end if
+ 
+             ! compute C = alpha*tmp*B + beta*C
+             call psp_gemspm_nn(M,N,K,tmp,'n',B,opB,C,alpha,beta)
+          end if
+          !call psp_gemspm_tn(M,N,K,A,opA,B,opB,C,alpha,beta)
        case (4)
           call psp_gemspm_tt(M,N,K,A,opA,B,opB,C,alpha,beta)
        end select

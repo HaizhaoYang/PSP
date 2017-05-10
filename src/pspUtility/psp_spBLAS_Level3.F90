@@ -385,19 +385,15 @@ contains
              if (alpha/=1.0_dp) then
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = 1,N
-                         C_loc(row_ind(i),cnt)= alpha*val(i)*B(cnt,idx_col) &
-                              + C_loc(row_ind(i),cnt)
-                      end do
+                      C_loc(row_ind(1),1:N)=alpha*val(i)*B(1:N,idx_col) &
+                           +C_loc(row_ind(i),1:N)  
                    end do
                 end do
              else
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = 1,N
-                         C_loc(row_ind(i),cnt)= val(i)*B(cnt,idx_col) &
-                              + C_loc(row_ind(i),cnt)
-                      end do
+                      C_loc(row_ind(1),1:N)=val(i)*B(1:N,idx_col) &
+                           +C_loc(row_ind(i),1:N)  
                    end do
                 end do
              end if
@@ -422,19 +418,15 @@ contains
              if (alpha/=1.0_dp) then
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = 1,N
-                         C_loc(idx_col,cnt)= alpha*val(i)*B(cnt,row_ind(i)) &
-                              + C_loc(idx_col,cnt)
-                      end do
+                      C_loc(idx_col,1:N)=alpha*val(i)*B(1:N,row_ind(i))&
+                           +C_loc(idx_col,1:N)
                    end do
                 end do
              else
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = 1,N
-                         C_loc(idx_col,cnt)= val(i)*B(cnt,row_ind(i)) &
-                              + C_loc(idx_col,cnt)
-                      end do
+                      C_loc(idx_col,1:N)=val(i)*B(1:N,row_ind(i))&
+                           +C_loc(idx_col,1:N)
                    end do
                 end do
              end if
@@ -462,19 +454,15 @@ contains
              if (alpha/=1.0_dp) then
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = JB,JB_1+N
-                         C_loc(row_ind(i),cnt-JB_1)= alpha*val(i)*B(cnt,idx_col+IB_1) &
-                              + C_loc(row_ind(i),cnt-JB_1)
-                      end do
+                      C_loc(row_ind(i),1:N)=alpha*val(i)*B(JB:JB_1+N,idx_col+IB_1) &
+                          + C_loc(row_ind(i),1:N)
                    end do
                 end do
              else
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = JB,JB_1+N
-                         C_loc(row_ind(i),cnt-JB_1)= val(i)*B(cnt,idx_col+IB_1) &
-                              + C_loc(row_ind(i),cnt-JB_1)
-                      end do
+                      C_loc(row_ind(i),1:N)=val(i)*B(JB:JB_1+N,idx_col+IB_1) &
+                          + C_loc(row_ind(i),1:N)
                    end do
                 end do
              end if
@@ -499,19 +487,15 @@ contains
              if (alpha/=1.0_dp) then
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = JB,JB_1+N
-                         C_loc(idx_col,cnt-JB_1)= alpha*val(i)*B(cnt,row_ind(i)+IB_1) &
-                              + C_loc(idx_col,cnt-JB_1)
-                      end do
+                      C_loc(idx_col,1:N)=alpha*val(i)*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                         +  C_loc(idx_col,1:N)
                    end do
                 end do
              else
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
-                      do cnt = JB,JB_1+N
-                         C_loc(idx_col,cnt-JB_1)= val(i)*B(cnt,row_ind(i)+IB_1) &
-                              + C_loc(idx_col,cnt-JB_1)
-                      end do
+                      C_loc(idx_col,1:N)=val(i)*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                          + C_loc(idx_col,1:N)
                    end do
                 end do
              end if
@@ -519,43 +503,19 @@ contains
        end if
        if (IC==1 .and. JC==1) then
           if (beta==1.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C(1:M,1:N)+C_loc(1:M,1:N)
           else if (beta==0.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+beta*C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=beta*C(1:M,1:N)+C_loc(1:M,1:N)
           end if
        else
           if (beta==1.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:IC_1+M,JC:JC_1+N)=C(IC:IC_1+M,JC:JC_1+N)+C_loc(IC:IC_1+M,JC:JC_1+N)
           else if (beta==0.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)
-                end do
-             end do
+             C(IC:IC_1+M,JC:JC_1+N)=C_loc(IC:IC_1+M,JC:JC_1+N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+beta*C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:IC_1+M,JC:JC_1+N)=beta*C(IC:IC_1+M,JC:JC_1+N)+C_loc(IC:IC_1+M,JC:JC_1+N)
           end if
        end if
 
@@ -565,33 +525,17 @@ contains
        if (IC==1 .and. JC==1) then
           if (beta/=1.0_dp) then
              if (beta==0.0_dp) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=0.0_dp
-                   end do
-                end do
+             C(1:M,1:N)=0.0_dp
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=beta*C(i,cnt)
-                   end do
-                end do
+             C(1:M,1:N)=beta*C(1:M,1:N)
              end if
           end if
        else
           if (beta/=1.0_dp) then
              if (beta==0.0_dp) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=0.0_dp
-                   end do
-                end do
+             C(IC:IC_1+M,JC:JC_1+N)=0.0_dp
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=beta*C(i+IC_1,cnt+JC_1)
-                   end do
-                end do
+             C(IC:IC_1+M,JC:JC_1+N)=beta* C(IC:IC_1+M,JC:JC_1+N)
              end if
           end if
        end if
@@ -674,15 +618,13 @@ contains
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=M) then
-                         do cnt = 1,N
-                            if (trB==1) then
-                               C_loc(row_ind(i),cnt)= alpha*val(i)*CONJG(B(cnt,idx_col)) &
-                                    + C_loc(row_ind(i),cnt)
-                            else
-                               C_loc(row_ind(i),cnt)= alpha*val(i)*B(cnt,idx_col) &
-                                    + C_loc(row_ind(i),cnt)
-                            end if
-                         end do
+                         if (trB==1) then
+                            C_loc(row_ind(i),1:N)= alpha*val(i)*CONJG(B(1:N,idx_col)) &
+                                 + C_loc(row_ind(i),1:N)
+                         else
+                            C_loc(row_ind(i),1:N)= alpha*val(i)*B(1:N,idx_col) &
+                                 + C_loc(row_ind(i),1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -690,15 +632,13 @@ contains
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=M) then
-                         do cnt = 1,N
-                            if (trB==1) then
-                               C_loc(row_ind(i),cnt)= val(i)*CONJG(B(cnt,idx_col)) &
-                                    + C_loc(row_ind(i),cnt)
-                            else
-                               C_loc(row_ind(i),cnt)= val(i)*B(cnt,idx_col) &
-                                    + C_loc(row_ind(i),cnt)
-                            end if
-                         end do
+                         if (trB==1) then
+                            C_loc(row_ind(i),1:N)= val(i)*CONJG(B(1:N,idx_col)) &
+                                 + C_loc(row_ind(i),1:N)
+                         else
+                            C_loc(row_ind(i),1:N)= val(i)*B(1:N,idx_col) &
+                                 + C_loc(row_ind(i),1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -738,21 +678,19 @@ contains
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt = 1,N
-                            if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt)= alpha*val(i)*CONJG(B(cnt,row_ind(i))) &
-                                    + C_loc(idx_col,cnt)
-                            else if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt)= alpha*CONJG(val(i))*B(cnt,row_ind(i)) &
-                                    + C_loc(idx_col,cnt)
-                            else if (trA==2 .and. trB==2) then
-                               C_loc(idx_col,cnt)= alpha*val(i)*B(cnt,row_ind(i)) &
-                                    + C_loc(idx_col,cnt)
-                            else ! trA==1 .and. trB==1
-                               C_loc(idx_col,cnt)= alpha*CONJG(val(i)*B(cnt,row_ind(i))) &
-                                    + C_loc(idx_col,cnt)
-                            end if
-                         end do
+                         if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*val(i)*CONJG(B(1:N,row_ind(i))) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*CONJG(val(i))*B(1:N,row_ind(i)) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==2 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*val(i)*B(1:N,row_ind(i)) &
+                                 + C_loc(idx_col,1:N)
+                         else ! trA==1 .and. trB==1
+                            C_loc(idx_col,1:N)= alpha*CONJG(val(i)*B(1:N,row_ind(i))) &
+                                 + C_loc(idx_col,1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -760,21 +698,19 @@ contains
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt = 1,N
-                            if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt)= val(i)*CONJG(B(cnt,row_ind(i))) &
-                                    + C_loc(idx_col,cnt)
-                            else if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt)= CONJG(val(i))*B(cnt,row_ind(i)) &
-                                    + C_loc(idx_col,cnt)
-                            else if (trA==2 .and. trB==2) then
-                               C_loc(idx_col,cnt)= val(i)*B(cnt,row_ind(i)) &
-                                    + C_loc(idx_col,cnt)
-                            else ! trA==1 .and. trB==1
-                               C_loc(idx_col,cnt)= CONJG(val(i)*B(cnt,row_ind(i))) &
-                                    + C_loc(idx_col,cnt)
-                            end if
-                         end do
+                         if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= val(i)*CONJG(B(1:N,row_ind(i))) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= CONJG(val(i))*B(1:N,row_ind(i)) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==2 .and. trB==2) then
+                            C_loc(idx_col,1:N)= val(i)*B(1:N,row_ind(i)) &
+                                 + C_loc(idx_col,1:N)
+                         else ! trA==1 .and. trB==1
+                            C_loc(idx_col,1:N)= CONJG(val(i)*B(1:N,row_ind(i))) &
+                                 + C_loc(idx_col,1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -807,15 +743,13 @@ contains
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=M) then
-                         do cnt = JB,JB_1+N
-                            if (trB==1) then
-                               C_loc(row_ind(i),cnt-JB_1)= alpha*val(i)*CONJG(B(cnt,idx_col+IB_1)) &
-                                    + C_loc(row_ind(i),cnt-JB_1)
-                            else
-                               C_loc(row_ind(i),cnt-JB_1)= alpha*val(i)*B(cnt,idx_col+IB_1) &
-                                    + C_loc(row_ind(i),cnt-JB_1)
-                            end if
-                         end do
+                         if (trB==1) then
+                            C_loc(row_ind(i),1:N)= alpha*val(i)*CONJG(B(JB:JB_1+N,idx_col+IB_1)) &
+                                 + C_loc(row_ind(i),1:N)
+                         else
+                            C_loc(row_ind(i),1:N)= alpha*val(i)*B(JB:JB_1+N,idx_col+IB_1) &
+                                 + C_loc(row_ind(i),1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -823,15 +757,13 @@ contains
                 do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=M) then
-                         do cnt = JB,JB_1+N
-                            if (trB==1) then
-                               C_loc(row_ind(i),cnt-JB_1)= val(i)*CONJG(B(cnt,idx_col+IB_1)) &
-                                    + C_loc(row_ind(i),cnt-JB_1)
-                            else
-                               C_loc(row_ind(i),cnt-JB_1)= val(i)*B(cnt,idx_col+IB_1) &
-                                    + C_loc(row_ind(i),cnt-JB_1)
-                            end if
-                         end do
+                         if (trB==1) then
+                            C_loc(row_ind(i),1:N)= val(i)*CONJG(B(JB:JB_1+N,idx_col+IB_1)) &
+                                 + C_loc(row_ind(i),1:N)
+                         else
+                            C_loc(row_ind(i),1:N)= val(i)*B(JB:JB_1+N,idx_col+IB_1) &
+                                 + C_loc(row_ind(i),1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -871,21 +803,19 @@ contains
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt = JB,JB_1+N
-                            if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= alpha*val(i)*CONJG(B(cnt,row_ind(i)+IB_1)) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= alpha*CONJG(val(i))*B(cnt,row_ind(i)+IB_1) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else if (trA==2 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= alpha*val(i)*B(cnt,row_ind(i)+IB_1) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else ! trA==1 .and. trB==1
-                               C_loc(idx_col,cnt-JB_1)= alpha*CONJG(val(i)*B(cnt,row_ind(i)+IB_1)) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            end if
-                         end do
+                         if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*val(i)*CONJG(B(JB:JB_1+N,row_ind(i)+IB_1)) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*CONJG(val(i))*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==2 .and. trB==2) then
+                            C_loc(idx_col,1:N)= alpha*val(i)*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                                 + C_loc(idx_col,1:N)
+                         else ! trA==1 .and. trB==1
+                            C_loc(idx_col,1:N)= alpha*CONJG(val(i)*B(JB:JB_1+N,row_ind(i)+IB_1)) &
+                                 + C_loc(idx_col,1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -893,21 +823,19 @@ contains
                 do idx_col=1,M!K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt = JB,JB_1+N
-                            if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= val(i)*CONJG(B(cnt,row_ind(i)+IB_1)) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else if (trA==1 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= CONJG(val(i))*B(cnt,row_ind(i)+IB_1) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else if (trA==2 .and. trB==2) then
-                               C_loc(idx_col,cnt-JB_1)= val(i)*B(cnt,row_ind(i)+IB_1) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            else ! trA==1 .and. trB==1
-                               C_loc(idx_col,cnt-JB_1)= CONJG(val(i)*B(cnt,row_ind(i)+IB_1)) &
-                                    + C_loc(idx_col,cnt-JB_1)
-                            end if
-                         end do
+                         if (trA==2 .and. trB==1) then!if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= val(i)*CONJG(B(JB:JB_1+N,row_ind(i)+IB_1)) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==1 .and. trB==2) then
+                            C_loc(idx_col,1:N)= CONJG(val(i))*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                                 + C_loc(idx_col,1:N)
+                         else if (trA==2 .and. trB==2) then
+                            C_loc(idx_col,1:N)= val(i)*B(JB:JB_1+N,row_ind(i)+IB_1) &
+                                 + C_loc(idx_col,1:N)
+                         else ! trA==1 .and. trB==1
+                            C_loc(idx_col,1:N)= CONJG(val(i)*B(JB:JB_1+N,row_ind(i)+IB_1)) &
+                                 + C_loc(idx_col,1:N)
+                         end if
                       end if
                    end do
                 end do
@@ -917,43 +845,19 @@ contains
        end if
        if (IC==1 .and. JC==1) then
           if (beta==cmplx_1) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)+C(1:M,1:N)
           else if (beta==cmplx_0) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+beta*C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)+beta*C(1:M,1:N)
           end if
        else
           if (beta==cmplx_1) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C_loc(1:M,1:N)+C(IC:M+IC_1,JC:N+JC_1)
           else if (beta==cmplx_0) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+beta*C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C_loc(1:M,1:N)+beta*C(IC:M+IC_1,JC:N+JC_1)
           end if
        end if
 
@@ -963,33 +867,17 @@ contains
        if (IC==1 .and. JC==1) then
           if (beta/=cmplx_1) then
              if (beta==cmplx_0) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=cmplx_0
-                   end do
-                end do
+                C(1:M,1:N)=cmplx_0
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=beta*C(i,cnt)
-                   end do
-                end do
+                C(1:M,1:N)=beta*C(1:M,1:N)
              end if
           end if
        else
           if (beta/=cmplx_1) then
              if (beta==cmplx_0) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=cmplx_0
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=cmplx_0
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=beta*C(i+IC_1,cnt+JC_1)
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=beta*C(IC:M+IC_1,JC:N+JC_1)
              end if
           end if
        end if
@@ -1093,10 +981,8 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=1,M
-                            C_loc(cnt,idx_col)= val(i)*A(row_ind(i),cnt) &
-                                 + C_loc(cnt,idx_col)
-                         end do
+                         C_loc(1:M,idx_col) = C_loc(1:M,idx_col) &
+                                 + val(i)*(A(row_ind(i),1:M))
                       end if
                    end do
                 end do
@@ -1104,10 +990,8 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=1,M
-                            C_loc(cnt,idx_col)= alpha*val(i)*A(row_ind(i),cnt) &
-                                 + C_loc(cnt,idx_col)
-                         end do
+                         C_loc(1:M,idx_col) = C_loc(1:M,idx_col) &
+                                 + alpha*val(i)*(A(row_ind(i),1:M))
                       end if
                    end do
                 end do
@@ -1118,10 +1002,8 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=1,M
-                            C_loc(cnt,row_ind(i))= alpha*val(i)*A(idx_col,cnt) &
-                                 + C_loc(cnt,row_ind(i))
-                         end do
+                         C_loc(1:M,row_ind(i)) = C_loc(1:M,row_ind(i)) &
+                                 + val(i)*(A(idx_col,1:M))
                       end if
                    end do
                 end do
@@ -1129,10 +1011,8 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=1,M
-                            C_loc(cnt,row_ind(i))= val(i)*A(idx_col,cnt) &
-                                 + C_loc(cnt,row_ind(i))
-                         end do
+                         C_loc(1:M,row_ind(i)) = C_loc(1:M,row_ind(i)) &
+                                 + alpha*val(i)*(A(idx_col,1:M))
                       end if
                    end do
                 end do
@@ -1187,10 +1067,8 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=IA,IA_1+M
-                            C_loc(cnt-IA_1,idx_col)= val(i)*A(row_ind(i)+JA_1,cnt) &
-                                 + C_loc(cnt-IA_1,idx_col)
-                         end do
+                         C_loc(1:M,idx_col) = C_loc(1:M,idx_col) &
+                                 +val(i)*A(row_ind(i)+JA_1,IA:IA_1+M)
                       end if
                    end do
                 end do
@@ -1198,10 +1076,8 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=IA,IA_1+M
-                            C_loc(cnt-IA_1,idx_col)= alpha*val(i)*A(row_ind(i)+JA_1,cnt) &
-                                 + C_loc(cnt-IA_1,idx_col)
-                         end do
+                         C_loc(1:M,idx_col) = C_loc(1:M,idx_col) &
+                                 +alpha*val(i)*A(row_ind(i)+JA_1,IA:IA_1+M)
                       end if
                    end do
                 end do
@@ -1209,24 +1085,20 @@ contains
 
           case (4)
              if (alpha==1.0_dp) then
-                do idx_col=1,K!N
+                do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=IA,IA_1+M
-                            C_loc(cnt-IA_1,row_ind(i))= alpha*val(i)*A(idx_col+JA_1,cnt) &
-                                 + C_loc(cnt-IA_1,row_ind(i))
-                         end do
+                         C_loc(1:M,row_ind(i)) = C_loc(1:M,row_ind(i)) &
+                                 +val(i)*A(idx_col+JA_1,IA:IA_1+M)
                       end if
                    end do
                 end do
              else
-                do idx_col=1,K!N
+                do idx_col=1,K
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=IA,IA_1+M
-                            C_loc(cnt-IA_1,row_ind(i))= val(i)*A(idx_col+JA_1,cnt) &
-                                 + C_loc(cnt-IA_1,row_ind(i))
-                         end do
+                         C_loc(1:M,row_ind(i)) = C_loc(1:M,row_ind(i)) &
+                                 +alpha*val(i)*A(idx_col+JA_1,IA:IA_1+M)
                       end if
                    end do
                 end do
@@ -1236,44 +1108,20 @@ contains
        end if
        if (IC==1 .and. JC==1) then
           if (beta==1.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N) = C(1:M,1:N) + C_loc(1:M,1:N)
           else if (beta==0.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)
-                end do
-             end do
+             C(1:M,1:N) = C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+beta*C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N) = beta*C(1:M,1:N) + C_loc(1:M,1:N)
           end if
           deallocate(C_loc)
        else
           if (beta==1.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C(IC:M+IC_1,JC:N+JC_1)+C_loc(1:M,1:N)
           else if (beta==0.0_dp) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+beta*C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=beta*C(IC:M+IC_1,JC:N+JC_1)+C_loc(1:M,1:N)
           end if
           deallocate(C_loc)
        end if
@@ -1282,33 +1130,17 @@ contains
        if (IC==1 .and. JC==1) then
           if (beta/=1.0_dp) then
              if (beta==0.0_dp) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=0.0_dp
-                   end do
-                end do
+                C(1:M,1:N)=0.0_dp
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=beta*C(i,cnt)
-                   end do
-                end do
+                C(1:M,1:N)=beta*C(1:M,1:N)
              end if
           end if
        else
           if (beta/=1.0_dp) then
              if (beta==0.0_dp) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=0.0_dp
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=0.0_dp
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=beta*C(i+IC_1,cnt+JC_1)
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=beta*C(IC:M+IC_1,JC:N+JC_1)
              end if
           end if
        end if
@@ -1423,15 +1255,13 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=1,M
-                            if (trA==1) then
-                               C_loc(cnt,idx_col)= alpha*val(i)*CONJG(A(row_ind(i),cnt)) &
-                                    + C_loc(cnt,idx_col)
-                            else
-                               C_loc(cnt,idx_col)= alpha*val(i)*A(row_ind(i),cnt) &
-                                    + C_loc(cnt,idx_col)
-                            end if
-                         end do
+                         if (trA==1) then
+                            C_loc(1:M,idx_col)=alpha*val(i)*CONJG(A(row_ind(i),1:M)) &
+                                 +C_loc(1:M,idx_col)
+                         else
+                            C_loc(1:M,idx_col)=alpha*val(i)*A(row_ind(i),1:M) &
+                                 +C_loc(1:M,idx_col)
+                         endif
                       end if
                    end do
                 end do
@@ -1439,15 +1269,13 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=1,M
-                            if (trA==1) then
-                               C_loc(cnt,idx_col)= val(i)*CONJG(A(row_ind(i),cnt)) &
-                                    + C_loc(cnt,idx_col)
-                            else
-                               C_loc(cnt,idx_col)= val(i)*A(row_ind(i),cnt) &
-                                    + C_loc(cnt,idx_col)
-                            end if
-                         end do
+                         if (trA==1) then
+                            C_loc(1:M,idx_col)=val(i)*CONJG(A(row_ind(i),1:M)) &
+                                 +C_loc(1:M,idx_col)
+                         else
+                            C_loc(1:M,idx_col)=val(i)*A(row_ind(i),1:M) &
+                                 +C_loc(1:M,idx_col)
+                         endif
                       end if
                    end do
                 end do
@@ -1457,21 +1285,19 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=1,M
-                            if (trA==1 .and. trB==2) then
-                               C_loc(cnt,row_ind(i))= alpha*val(i)*CONJG(A(idx_col,cnt)) &
-                                    + C_loc(cnt,row_ind(i))
-                            else if (trA==2 .and. trB==1) then
-                               C_loc(cnt,row_ind(i))= alpha*CONJG(val(i))*A(idx_col,cnt) &
-                                    + C_loc(cnt,row_ind(i))
-                            else if (trA==1 .and. trB==1) then
-                               C_loc(cnt,row_ind(i))= alpha*CONJG(val(i)*A(idx_col,cnt)) &
-                                    + C_loc(cnt,row_ind(i))
-                            else
-                               C_loc(cnt,row_ind(i))= alpha*val(i)*A(idx_col,cnt) &
-                                    + C_loc(cnt,row_ind(i))
-                            end if
-                         end do
+                         if (trA==1 .and. trB==2) then
+                            C_loc(1:M,row_ind(i))= alpha*val(i)*CONJG(A(idx_col,1:M)) &
+                                 + C_loc(1:M,row_ind(i))
+                         else if (trA==2 .and. trB==1) then
+                            C_loc(1:M,row_ind(i))= alpha*CONJG(val(i))*A(idx_col,1:M) &
+                                 + C_loc(1:M,row_ind(i))
+                         else if (trA==1 .and. trB==1) then
+                            C_loc(1:M,row_ind(i))= alpha*CONJG(val(i)*A(idx_col,1:M)) &
+                                 + C_loc(1:M,row_ind(i))
+                         else
+                            C_loc(1:M,row_ind(i))= alpha*val(i)*A(idx_col,1:M) &
+                                 + C_loc(1:M,row_ind(i))
+                         end if
                       end if
                    end do
                 end do
@@ -1479,21 +1305,19 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=1,M
-                            if (trA==1 .and. trB==2) then
-                               C_loc(cnt,row_ind(i))= val(i)*CONJG(A(idx_col,cnt)) &
-                                    + C_loc(cnt,row_ind(i))
-                            else if (trA==2 .and. trB==1) then
-                               C_loc(cnt,row_ind(i))= CONJG(val(i))*A(idx_col,cnt) &
-                                    + C_loc(cnt,row_ind(i))
-                            else if (trA==1 .and. trB==1) then
-                               C_loc(cnt,row_ind(i))= CONJG(val(i)*A(idx_col,cnt)) &
-                                    + C_loc(cnt,row_ind(i))
-                            else
-                               C_loc(cnt,row_ind(i))= val(i)*A(idx_col,cnt) &
-                                    + C_loc(cnt,row_ind(i))
-                            end if
-                         end do
+                         if (trA==1 .and. trB==2) then
+                            C_loc(1:M,row_ind(i))= val(i)*CONJG(A(idx_col,1:M)) &
+                                 + C_loc(1:M,row_ind(i))
+                         else if (trA==2 .and. trB==1) then
+                            C_loc(1:M,row_ind(i))= CONJG(val(i))*A(idx_col,1:M) &
+                                 + C_loc(1:M,row_ind(i))
+                         else if (trA==1 .and. trB==1) then
+                            C_loc(1:M,row_ind(i))= CONJG(val(i)*A(idx_col,1:M)) &
+                                 + C_loc(1:M,row_ind(i))
+                         else
+                            C_loc(1:M,row_ind(i))= val(i)*A(idx_col,1:M) &
+                                 + C_loc(1:M,row_ind(i))
+                         end if
                       end if
                    end do
                 end do
@@ -1556,15 +1380,13 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=IA,IA_1+M
-                            if (trA==1) then
-                               C_loc(cnt-IA_1,idx_col)= alpha*val(i)*CONJG(A(row_ind(i)+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,idx_col)
-                            else
-                               C_loc(cnt-IA_1,idx_col)= alpha*val(i)*A(row_ind(i)+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,idx_col)
-                            end if
-                         end do
+                         if (trA==1) then
+                            C_loc(1:M,idx_col)= alpha*val(i)*CONJG(A(row_ind(i)+JA_1,IA:IA_1+M)) &
+                                 + C_loc(1:M,idx_col)
+                         else
+                            C_loc(1:M,idx_col)= alpha*val(i)*A(row_ind(i)+JA_1,IA:IA_1+M) &
+                                 + C_loc(1:M,idx_col)
+                         end if
                       end if
                    end do
                 end do
@@ -1572,15 +1394,13 @@ contains
                 do idx_col=1,N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=K) then
-                         do cnt=IA,IA_1+M
-                            if (trA==1) then
-                               C_loc(cnt-IA_1,idx_col)= val(i)*CONJG(A(row_ind(i)+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,idx_col)
-                            else
-                               C_loc(cnt-IA_1,idx_col)= val(i)*A(row_ind(i)+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,idx_col)
-                            end if
-                         end do
+                         if (trA==1) then
+                            C_loc(1:M,idx_col)= val(i)*CONJG(A(row_ind(i)+JA_1,IA:IA_1+M)) &
+                                 + C_loc(1:M,idx_col)
+                         else
+                            C_loc(1:M,idx_col)= val(i)*A(row_ind(i)+JA_1,IA:IA_1+M) &
+                                 + C_loc(1:M,idx_col)
+                         end if
                       end if
                    end do
                 end do
@@ -1590,21 +1410,19 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=IA,IA_1+M
                             if (trA==1 .and. trB==2) then
-                               C_loc(cnt-IA_1,row_ind(i))= alpha*val(i)*CONJG(A(idx_col+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= alpha*val(i)*CONJG(A(idx_col+JA_1,IA:IA_1+M)) &
+                                    + C_loc(1:M,row_ind(i))
                             else if (trA==2 .and. trB==1) then
-                               C_loc(cnt-IA_1,row_ind(i))= alpha*CONJG(val(i))*A(idx_col+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= alpha*CONJG(val(i))*A(idx_col+JA_1,IA:IA_1+M) &
+                                    + C_loc(1:M,row_ind(i))
                             else if (trA==1 .and. trB==1) then
-                               C_loc(cnt-IA_1,row_ind(i))= alpha*CONJG(val(i)*A(idx_col+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= alpha*CONJG(val(i)*A(idx_col+JA_1,IA:IA_1+M)) &
+                                    + C_loc(1:M,row_ind(i))
                             else
-                               C_loc(cnt-IA_1,row_ind(i))= alpha*val(i)*A(idx_col+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= alpha*val(i)*A(idx_col+JA_1,IA:IA_1+M) &
+                                    + C_loc(1:M,row_ind(i))
                             end if
-                         end do
                       end if
                    end do
                 end do
@@ -1612,21 +1430,19 @@ contains
                 do idx_col=1,K!N
                    do i=col_ptr(idx_col),col_ptr(idx_col+1)-1
                       if (row_ind(i)<=N) then
-                         do cnt=IA,IA_1+M
                             if (trA==1 .and. trB==2) then
-                               C_loc(cnt-IA_1,row_ind(i))= val(i)*CONJG(A(idx_col+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= val(i)*CONJG(A(idx_col+JA_1,IA:IA_1+M)) &
+                                    + C_loc(1:M,row_ind(i))
                             else if (trA==2 .and. trB==1) then
-                               C_loc(cnt-IA_1,row_ind(i))= CONJG(val(i))*A(idx_col+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= CONJG(val(i))*A(idx_col+JA_1,IA:IA_1+M) &
+                                    + C_loc(1:M,row_ind(i))
                             else if (trA==1 .and. trB==1) then
-                               C_loc(cnt-IA_1,row_ind(i))= CONJG(val(i)*A(idx_col+JA_1,cnt)) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= CONJG(val(i)*A(idx_col+JA_1,IA:IA_1+M)) &
+                                    + C_loc(1:M,row_ind(i))
                             else
-                               C_loc(cnt-IA_1,row_ind(i))= val(i)*A(idx_col+JA_1,cnt) &
-                                    + C_loc(cnt-IA_1,row_ind(i))
+                               C_loc(1:M,row_ind(i))= val(i)*A(idx_col+JA_1,IA:IA_1+M) &
+                                    + C_loc(1:M,row_ind(i))
                             end if
-                         end do
                       end if
                    end do
                 end do
@@ -1635,43 +1451,19 @@ contains
        end if
        if (IC==1 .and. JC==1) then
           if (beta==cmplx_1) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C(IC:M+IC_1,JC:N+JC_1)+C_loc(1:M,1:N)
           else if (beta==cmplx_0) then
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i+IC_1,cnt+JC_1)=C_loc(i,cnt)+beta*C(i+IC_1,cnt+JC_1)
-                end do
-             end do
+             C(IC:M+IC_1,JC:N+JC_1)=beta*C(IC:M+IC_1,JC:N+JC_1)+C_loc(1:M,1:N)
           end if
        else
           if (beta==cmplx_1) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)+C(1:M,1:N)
           else if (beta==cmplx_0) then
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)
           else
-             do cnt=1,N
-                do i=1,M
-                   C(i,cnt)=C_loc(i,cnt)+beta*C(i,cnt)
-                end do
-             end do
+             C(1:M,1:N)=C_loc(1:M,1:N)+beta*C(1:M,1:N)
           end if
        end if
        deallocate(C_loc)
@@ -1680,33 +1472,17 @@ contains
        if (IC==1 .and. JC==1) then
           if (beta/=cmplx_1) then
              if (beta==cmplx_0) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=cmplx_0
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=cmplx_0
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i+IC_1,cnt+JC_1)=beta*C(i+IC_1,cnt+JC_1)
-                   end do
-                end do
+                C(IC:M+IC_1,JC:N+JC_1)=beta*C(IC:M+IC_1,JC:N+JC_1)
              end if
           end if
        else
           if (beta/=cmplx_1) then
-             if (beta==cmplx_0) then
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=cmplx_0
-                   end do
-                end do
+             if (beta==cmplx_0) then 
+                C(1:M,1:N)=cmplx_0
              else
-                do cnt=1,N
-                   do i=1,M
-                      C(i,cnt)=beta*C(i,cnt)
-                   end do
-                end do
+                C(1:M,1:N)=beta*C(1:M,1:N)
              end if
           end if
        end if

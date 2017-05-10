@@ -1,6 +1,7 @@
 Todo list for Psp
 =================
 
+[1] Optimizing gems using dimension and matrix format adaptive communication.
 [ ] Properly enclose MPI statements within #ifdef MPI ... #endif blocks.
 [ ] Prune the numerous unused variables form the source code.
 [ ] Decide how to manage -DLAP and -DSLAP.
