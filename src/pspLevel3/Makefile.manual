@@ -4,7 +4,7 @@ include $(PSPDIR)/make.inc
 .SUFFIXES:
 .SUFFIXES: .o .a .f90 .F90
 
-all : pspMatSum.o pspGemm.o pspSpmm_nn.o pspSpmm_tn.o pspSpmm_nt.o pspSpmm_tt.o pspSpmm.o pspMspm_nn.o pspMspm_nt.o pspMspm_tn.o pspMspm_tt.o pspMspm.o pspSpmSpm_nn.o pspSpmSpm_nt.o pspSpmSpm_tn.o pspSpmSpm_tt.o pspSpmSpm.o pspLevel3.o
+all : pspMatSum.o pspGemm.o pspMspm_nn.o pspMspm_nt.o pspMspm_tn.o pspMspm_tt.o pspMspm.o pspSpmm_nn.o pspSpmm_tn.o pspSpmm_nt.o pspSpmm_tt.o pspSpmm.o pspSpmSpm_nn.o pspSpmSpm_nt.o pspSpmSpm_tn.o pspSpmSpm_tt.o pspSpmSpm.o pspLevel3.o
 
 clean :
 	rm -f *.a
